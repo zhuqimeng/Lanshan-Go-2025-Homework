@@ -10,10 +10,10 @@ func main() {
 		fmt.Scan(&x)
 		arr = append(arr, x)
 	}
-	fmt.Println(count(arr))
+	fmt.Println(Count(arr))
 }
 
-func count(slice []int) map[int]int {
+func Count(slice []int) map[int]int {
 	nums := make(map[int]int, 100)
 	for _, value := range slice {
 		nums[value]++
