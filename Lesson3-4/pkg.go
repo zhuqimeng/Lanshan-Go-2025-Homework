@@ -69,7 +69,7 @@ func (k kitchen) Upgrade() {
 	fmt.Printf("你现在的厨房等级为 %d，提升到下一阶段需要 %d 元。是否提升？(y/n)\n", MyKitchen.level, MyKitchen.level*100)
 	op := GetChoice()
 	switch op {
-	case 'y':
+	case "y":
 		if money < MyKitchen.level*100 {
 			fmt.Println("你没有足够的钱。")
 		} else {
@@ -77,7 +77,7 @@ func (k kitchen) Upgrade() {
 			MyKitchen.level++
 			fmt.Printf("升级成功！你现在中午可以接待 %d 名顾客了。\n", MyKitchen.level)
 		}
-	case 'n':
+	case "n":
 		fmt.Println("留得青山在，不怕没柴烧————稳健的选择。")
 	}
 }
@@ -126,7 +126,7 @@ func (k kitchen) Cook(g Guest) {
 	fmt.Println("你是否愿意售卖这道菜？(y/n)")
 	op := GetChoice()
 	switch op {
-	case 'y':
+	case "y":
 		fmt.Println("【你】：用心提供每一道菜是本店的宗旨。")
 		if id1 != -1 {
 			MyStore.taste[id1].number--
@@ -145,7 +145,7 @@ func (k kitchen) Cook(g Guest) {
 			MyKitchen.tidy -= 5
 			fmt.Println("你获得了", g.pay, "元。")
 		}
-	case 'n':
+	case "n":
 		fmt.Println("【你】：商人不做亏本的买卖。")
 		fmt.Println("顾客遗憾地离开了。")
 		refuseCnt++
@@ -195,7 +195,7 @@ func (s *storehouse) Clear() {
 
 func (s *storehouse) Check() {
 	l1, l2, l3 := len(s.taste), len(s.sauce), len(s.dish)
-	fmt.Println("------------------------")
+	fmt.Println(gap1)
 	fmt.Printf("仓库里共有%d件存货。 \n", l1+l2+l3)
 	fmt.Printf("配菜共有%d件：\n", l1)
 	for _, t := range s.taste {
@@ -209,7 +209,7 @@ func (s *storehouse) Check() {
 	for _, d := range s.dish {
 		d.Check()
 	}
-	fmt.Println("----")
+	fmt.Println(gap2)
 }
 
 type market struct {
@@ -223,9 +223,11 @@ func (m market) Welcome() {
 		fmt.Printf("%d.新鲜的 %s，价格为 %d\n", id+1, foods[id], price[id])
 	}
 	var op, val, cnt int
-	_, err := fmt.Scanf("%d\n", &op)
-	if err != nil {
-		panic(err)
+	for {
+		_, err := fmt.Scanln(&op)
+		if err == nil {
+			break
+		}
 	}
 	if op < 1 || op > 9 {
 		val = 0
@@ -233,9 +235,11 @@ func (m market) Welcome() {
 	}
 	op--
 	fmt.Printf("【前台】：好的，%s，您需要多少份？\n", foods[op])
-	_, err = fmt.Scanf("%d\n", &cnt)
-	if err != nil {
-		panic(err)
+	for {
+		_, err := fmt.Scanln(&cnt)
+		if err == nil {
+			break
+		}
 	}
 	if cnt < 0 {
 		panic("expect a positive integer")

@@ -30,14 +30,16 @@ func GetRand(limit int) int {
 	return res
 }
 
-func GetChoice() byte {
-	var res byte
-	_, err := fmt.Scanf("%c\n", &res)
-	if err != nil {
-		panic(err)
-	}
-	if res != 'y' && res != 'n' {
-		panic("expect 'y' or 'n'")
+func GetChoice() string {
+	var res string
+	for {
+		_, err := fmt.Scan(&res)
+		if res != "y" && res != "n" {
+			continue
+		}
+		if err == nil {
+			break
+		}
 	}
 	return res
 }
@@ -46,9 +48,11 @@ func Morning() {
 	fmt.Printf("%s经营的第 %d 天，%s\n", restaurant, day, hitokoto[GetRand(len(hitokoto))])
 	fmt.Println(hintMorning)
 	var op int
-	_, err := fmt.Scanf("%d\n", &op)
-	if err != nil {
-		panic(err)
+	for {
+		_, err := fmt.Scanln(&op)
+		if err == nil {
+			break
+		}
 	}
 	if op == 1 {
 		MyMarket.Welcome()
@@ -75,25 +79,30 @@ func Noon() {
 	goStep()
 }
 
-func Evening() {
+func Evening() bool {
 	fmt.Println(hintEvening)
 	MyStore.Clear()
 	var op int
-	_, err := fmt.Scanf("%d\n", &op)
-	if err != nil {
-		panic(err)
+	for {
+		_, err := fmt.Scanln(&op)
+		if err == nil {
+			break
+		}
 	}
 	if op == 1 {
 		MyStore.Check()
 	} else if op == 2 {
 		fmt.Printf("你的小金库里还剩下 %d 元。\n", money)
 	} else if op == 3 {
-		fmt.Println("您放弃了游戏。")
-		os.Exit(0)
+		fmt.Println("你想了想，觉得开餐厅这件事还是不太适合自己……")
+		fmt.Println("于是你决定在今天结束时将", restaurant, "转让给其他人。")
+		goStep()
+		return true
 	} else {
 		zeroCnt++
 	}
 	goStep()
+	return false
 }
 
 func goStep() {
@@ -108,19 +117,24 @@ func goStep() {
 
 func Init() {
 	fmt.Println("请输入你的餐厅名字：")
-	_, err := fmt.Scan(&restaurant)
-	if err != nil {
-		panic(err)
+	for {
+		_, err := fmt.Scanln(&restaurant)
+		if err == nil {
+			break
+		}
 	}
+
 	fg := HasSuffix(restaurant, "餐厅")
 	if !fg {
 		restaurant = restaurant + "餐厅"
 	}
 	fmt.Printf("恭喜，%s今天就正式成立了，请妥善经营哦！\n", restaurant)
 	fmt.Println(hintMode)
-	_, err = fmt.Scanf("%d", &mode)
-	if err != nil {
-		panic(err)
+	for {
+		_, err := fmt.Scanln(&mode)
+		if err == nil {
+			break
+		}
 	}
 	switch mode {
 	case 1:
@@ -184,11 +198,14 @@ func CheckAchieve() {
 }
 
 func Summary() {
-	fmt.Printf("下面是游戏总结：\n%s最终赚了 %d 元。", restaurant, money)
+	fmt.Println(gap1)
+	fmt.Printf("下面是游戏总结：\n%s最终赚了 %d 元。\n", restaurant, money)
 	fmt.Println("这是你获得的成就：")
 	for _, v := range achievementList {
 		if v.fg == true {
 			fmt.Println(v.describe)
 		}
 	}
+	fmt.Println(gap2)
+	goStep()
 }

@@ -136,4 +136,14 @@ var achievementList = []Achievement{
 		},
 		describe: "【及时补充】：第一次去商店补充食材。",
 	},
+	{
+		fg: false,
+		check: func() bool {
+			if zeroCnt > 10 {
+				return true
+			}
+			return false
+		},
+		describe: "【养生流派】：进行十次休息。",
+	},
 }

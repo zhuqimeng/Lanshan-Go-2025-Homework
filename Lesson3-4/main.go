@@ -5,8 +5,11 @@ func main() {
 	for ; BreakJudge(); day++ {
 		Morning()
 		Noon()
-		Evening()
+		fg := Evening()
 		CheckAchieve()
+		if fg == true {
+			break
+		}
 	}
 	Summary()
 }
