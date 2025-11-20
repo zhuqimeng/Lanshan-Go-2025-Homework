@@ -13,6 +13,11 @@ var (
 	MyKitchen  kitchen
 	MyStore    storehouse
 	MyMarket   market
+	serveCnt   int
+	refuseCnt  int
+	badCnt     int
+	payNumber  int
+	zeroCnt    int
 )
 
 type Guest struct {
@@ -130,9 +135,11 @@ func (k kitchen) Cook(g Guest) {
 			MyStore.sauce[id2].number--
 		}
 		MyStore.dish[id3].number--
+		serveCnt++
 		chk := GetRand(100)
 		if chk > MyKitchen.tidy {
 			fmt.Println("由于厨房糟糕的卫生，顾客拒绝为你的菜品付款。（是时候打扫一下厨房了！）")
+			badCnt++
 		} else {
 			money += g.pay
 			MyKitchen.tidy -= 5
@@ -141,6 +148,7 @@ func (k kitchen) Cook(g Guest) {
 	case 'n':
 		fmt.Println("【你】：商人不做亏本的买卖。")
 		fmt.Println("顾客遗憾地离开了。")
+		refuseCnt++
 	}
 }
 
@@ -154,7 +162,7 @@ type Stuff interface {
 }
 
 func (s stuff) Check() {
-	fmt.Printf("这是%d个%s，预计会在%d日晚上腐坏。（还剩%d天）\n", s.number, s.name, s.endtime, s.endtime-day)
+	fmt.Printf("这是 %d 个 %s，预计会在第 %d 日晚上腐坏。（还剩 %d 天）\n", s.number, s.name, s.endtime, s.endtime-day)
 }
 
 type storehouse struct {
@@ -275,11 +283,12 @@ end:
 		return
 	}
 	money -= val
+	payNumber += val
 	fmt.Printf("你支付了 %d 元，并离开了商店。\n", val)
 }
 
 type Achievement struct {
 	fg       bool
-	check    func()
+	check    func() bool
 	describe string
 }

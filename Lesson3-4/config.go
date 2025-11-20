@@ -74,3 +74,66 @@ var guestList = []Guest{
 		sex:   0,
 	},
 }
+
+var achievementList = []Achievement{
+	{
+		fg: false,
+		check: func() bool {
+			if money < 0 {
+				return true
+			}
+			return false
+		},
+		describe: "【倾家荡产】：你花光了所有积蓄。",
+	},
+	{
+		fg: false,
+		check: func() bool {
+			if money > 300 {
+				return true
+			}
+			return false
+		},
+		describe: "【小有所获】：第一次存款达到 300 元。",
+	},
+	{
+		fg: false,
+		check: func() bool {
+			if serveCnt > 0 {
+				return true
+			}
+			return false
+		},
+		describe: "【第一桶金】：第一次为顾客提供菜品。",
+	},
+	{
+		fg: false,
+		check: func() bool {
+			if refuseCnt > 0 {
+				return true
+			}
+			return false
+		},
+		describe: "【学会拒绝】：第一次拒绝为顾客上菜。",
+	},
+	{
+		fg: false,
+		check: func() bool {
+			if badCnt > 0 {
+				return true
+			}
+			return false
+		},
+		describe: "【邋里邋遢】：第一次因为厨房太脏而被吃霸王餐。",
+	},
+	{
+		fg: false,
+		check: func() bool {
+			if payNumber > 0 {
+				return true
+			}
+			return false
+		},
+		describe: "【及时补充】：第一次去商店补充食材。",
+	},
+}

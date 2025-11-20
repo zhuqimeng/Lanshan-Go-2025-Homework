@@ -57,6 +57,8 @@ func Morning() {
 		fmt.Println("你花了一上午进行大扫除，现在厨房的每个角落都一尘不染！")
 	} else if op == 3 {
 		MyKitchen.Upgrade()
+	} else {
+		zeroCnt++
 	}
 	goStep()
 }
@@ -85,12 +87,12 @@ func Evening() {
 		MyStore.Check()
 	} else if op == 2 {
 		fmt.Printf("你的小金库里还剩下 %d 元。\n", money)
+	} else if op == 3 {
+		fmt.Println("您放弃了游戏。")
+		os.Exit(0)
+	} else {
+		zeroCnt++
 	}
-	goStep()
-	var lose int
-	lose = min(10+(day/10), 30)
-	money -= lose
-	fmt.Printf("凌晨 00：00，自动支付了餐厅门面租金 %d 元。\n", lose)
 	goStep()
 }
 
@@ -168,9 +170,25 @@ func BreakJudge() bool {
 }
 
 func CheckAchieve() {
-
+	for id, v := range achievementList {
+		if v.fg == false && v.check() {
+			fmt.Println("你解锁了成就，", v.describe)
+			achievementList[id].fg = true
+		}
+	}
+	var lose int
+	lose = min(10+(day/10), 30)
+	money -= lose
+	fmt.Printf("凌晨 00：00，自动支付了餐厅门面租金 %d 元。\n", lose)
+	goStep()
 }
 
 func Summary() {
 	fmt.Printf("下面是游戏总结：\n%s最终赚了 %d 元。", restaurant, money)
+	fmt.Println("这是你获得的成就：")
+	for _, v := range achievementList {
+		if v.fg == true {
+			fmt.Println(v.describe)
+		}
+	}
 }
