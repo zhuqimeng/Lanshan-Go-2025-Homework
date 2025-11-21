@@ -73,6 +73,60 @@ var guestList = []Guest{
 		pay:   17,
 		sex:   0,
 	},
+	{
+		name:  "穿山甲",
+		hello: "不好意思哈，走错片场了。",
+		taste: "蔬菜",
+		sauce: "无",
+		dish:  "烤鱼",
+		pay:   12,
+		sex:   1,
+	},
+	{
+		name:  "穿山甲",
+		hello: "你这里有鸡汤卖吗？",
+		taste: "无",
+		sauce: "无",
+		dish:  "无",
+		pay:   -1,
+		sex:   1,
+	},
+	{
+		name:  "章鱼哥",
+		hello: "你知道吗，竖笛是世界上最美妙的乐器~~~",
+		taste: "水果",
+		sauce: "无",
+		dish:  "面条",
+		pay:   14,
+		sex:   -1,
+	},
+	{
+		name:  "章鱼哥",
+		hello: "艺术是要吃苦的。",
+		taste: "蔬菜",
+		sauce: "番茄酱",
+		dish:  "面条",
+		pay:   11,
+		sex:   -1,
+	},
+	{
+		name:  "爱莉希雅",
+		hello: "亲爱的山雀，请将我的箭，我的花，与我的爱，带给那子然独行的旅人。",
+		taste: "牛肉",
+		sauce: "沙拉酱",
+		dish:  "米饭",
+		pay:   34,
+		sex:   0,
+	},
+	{
+		name:  "爱莉希雅",
+		hello: "你好！新的一天，从一场美妙的邂逅开始。",
+		taste: "无",
+		sauce: "沙拉酱",
+		dish:  "烤鱼",
+		pay:   29,
+		sex:   0,
+	},
 }
 
 var achievementList = []Achievement{
@@ -95,6 +149,16 @@ var achievementList = []Achievement{
 			return false
 		},
 		describe: "【小有所获】：第一次存款达到 300 元。",
+	},
+	{
+		fg: false,
+		check: func() bool {
+			if money >= 666 {
+				return true
+			}
+			return false
+		},
+		describe: "【经济头脑】：第一次存款达到 666 元。",
 	},
 	{
 		fg: false,
@@ -199,21 +263,38 @@ var achievementList = []Achievement{
 	{
 		fg: false,
 		check: func() bool {
-			if winMoney >= 100 {
+			if winMoney >= 300 {
 				return true
 			}
 			return false
 		},
-		describe: "【幸运骰子】：通过扔骰子累计赚取 100 元。",
+		describe: "【幸运骰子】：通过扔骰子累计赚取 300 元。",
 	},
 	{
 		fg: false,
 		check: func() bool {
-			if lostMoney >= 100 {
+			if lostMoney >= 300 {
 				return true
 			}
 			return false
 		},
-		describe: "【血本无归】：因为扔骰子累计失去 100 元。",
+		describe: "【血本无归】：因为扔骰子累计失去 300 元。",
+	},
+	{
+		fg: false,
+		check: func() bool {
+			if maxStake >= 1000 {
+				return true
+			}
+			return false
+		},
+		describe: "【一掷千金】：扔骰子单次押注金额超过 1000 元。",
+	},
+	{
+		fg: false,
+		check: func() bool {
+			return allPut
+		},
+		describe: "【倾家荡产】：因为扔骰子而输掉了所有存款。",
 	},
 }

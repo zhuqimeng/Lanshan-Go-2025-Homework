@@ -22,6 +22,8 @@ var (
 	dayIncome  int
 	winMoney   int
 	lostMoney  int
+	maxStake   int
+	allPut     bool
 )
 
 type Guest struct {
@@ -226,6 +228,7 @@ func (m market) Welcome() {
 	for id := 0; id < 9; id++ {
 		fmt.Printf("%d.新鲜的 %s，价格为 %d\n", id+1, foods[id], price[id])
 	}
+Loop:
 	var op, val, cnt int
 	fg := false
 	for {
@@ -233,10 +236,11 @@ func (m market) Welcome() {
 		if err == nil {
 			break
 		}
+		fmt.Println("请再次输入。")
 	}
 	if op < 1 || op > 9 {
-		val = 0
-		goto end
+		fmt.Println("请再次输入。")
+		goto Loop
 	}
 	op--
 	fmt.Printf("【前台】：好的，%s，您需要多少份？\n", foods[op])
@@ -248,6 +252,7 @@ func (m market) Welcome() {
 		if err == nil {
 			break
 		}
+		fmt.Println("请再次输入。")
 	}
 	val = price[op] * cnt
 	if money < val {

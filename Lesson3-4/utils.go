@@ -34,12 +34,19 @@ func GetChoice() string {
 	var res string
 	for {
 		_, err := fmt.Scan(&res)
-		if res != "y" && res != "n" {
+		if res != "y" && res != "n" && res != "yes" && res != "no" && res != "YES" && res != "NO" {
 			continue
 		}
 		if err == nil {
 			break
 		}
+		fmt.Println("请再次输入。")
+	}
+	if res == "YES" || res == "yes" {
+		res = "y"
+	}
+	if res == "NO" || res == "no" {
+		res = "n"
 	}
 	return res
 }
@@ -60,7 +67,9 @@ func smallGame() {
 		if err == nil {
 			break
 		}
+		fmt.Println("请再次输入。")
 	}
+	maxStake = max(maxStake, x)
 	chk := GetRand(100) + 1
 	fmt.Println("你骰出了点数：", chk)
 	if chk > 50 {
@@ -70,6 +79,9 @@ func smallGame() {
 		fmt.Println("你获得了", x, "元。")
 	} else {
 		fmt.Println("【庄家】：我这里可没有后悔药卖，好好开你的餐厅吧……")
+		if money == x {
+			allPut = true
+		}
 		money -= x
 		lostMoney += x
 		fmt.Println("你失去了", x, "元。")
@@ -79,12 +91,14 @@ func smallGame() {
 func Morning() {
 	fmt.Printf("%s经营的第 %d 天，%s\n", restaurant, day, hitokoto[GetRand(len(hitokoto))])
 	fmt.Println(hintMorning)
+Loop:
 	var op int
 	for {
 		_, err := fmt.Scanln(&op)
 		if err == nil {
 			break
 		}
+		fmt.Println("请再次输入。")
 	}
 	if op == 1 {
 		MyMarket.Welcome()
@@ -95,8 +109,11 @@ func Morning() {
 		MyKitchen.Upgrade()
 	} else if op == 4 {
 		smallGame()
-	} else {
+	} else if op == 0 {
 		zeroCnt++
+	} else {
+		fmt.Println("请再次输入。")
+		goto Loop
 	}
 	goStep()
 }
@@ -124,12 +141,14 @@ func Noon() {
 func Evening() bool {
 	fmt.Println(hintEvening)
 	MyStore.Clear()
+Loop:
 	var op int
 	for {
 		_, err := fmt.Scanln(&op)
 		if err == nil {
 			break
 		}
+		fmt.Println("请再次输入。")
 	}
 	if op == 1 {
 		MyMarket.Welcome()
@@ -142,8 +161,11 @@ func Evening() bool {
 		fmt.Println("于是你决定在今天结束时将", restaurant, "转让给其他人。")
 		goStep()
 		return true
-	} else {
+	} else if op == 0 {
 		zeroCnt++
+	} else {
+		fmt.Println("请再次输入。")
+		goto Loop
 	}
 	goStep()
 	return false
@@ -160,25 +182,27 @@ func goStep() {
 }
 
 func Init() {
-	fmt.Println("请输入你的餐厅名字：")
+	fmt.Println("请输入你的餐厅名字：（请不要输入带空格的名字）")
 	for {
 		_, err := fmt.Scanln(&restaurant)
 		if err == nil {
 			break
 		}
+		fmt.Println("请再次输入。")
 	}
-
 	fg := HasSuffix(restaurant, "餐厅")
 	if !fg {
 		restaurant = restaurant + "餐厅"
 	}
 	fmt.Printf("恭喜，%s今天就正式成立了，请妥善经营哦！\n", restaurant)
 	fmt.Println(hintMode)
+Loop:
 	for {
 		_, err := fmt.Scanln(&mode)
 		if err == nil {
 			break
 		}
+		fmt.Println("请再次输入。")
 	}
 	switch mode {
 	case 1:
@@ -205,13 +229,17 @@ func Init() {
 	case 2:
 		money = 2000
 		fmt.Println("敬请期待……")
+		goStep()
 		os.Exit(0)
 	case 3:
 		fmt.Println("敬请期待……")
+		goStep()
 		os.Exit(0)
 	default:
-		panic("expected integer 1-3")
+		fmt.Println("请再次输入。")
+		goto Loop
 	}
+	fmt.Println("你获得了启动资金", money, "元。")
 	fmt.Println("那么，游戏开始……")
 }
 
