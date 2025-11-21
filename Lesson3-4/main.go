@@ -2,12 +2,12 @@ package main
 
 func main() {
 	Init()
-	for ; BreakJudge(); day++ {
+	for ; ; day++ {
 		Morning()
 		Noon()
 		fg := Evening()
 		CheckAchieve()
-		if fg == true {
+		if fg || BreakJudge() {
 			break
 		}
 	}

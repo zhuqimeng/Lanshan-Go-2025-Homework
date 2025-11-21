@@ -44,6 +44,38 @@ func GetChoice() string {
 	return res
 }
 
+func smallGame() {
+	fmt.Println("【庄家】：输入你要押注的钱，然后投掷骰子……有一半的概率获得双倍，一半的概率失去所有。")
+	var x int
+	for {
+		_, err := fmt.Scanln(&x)
+		if x <= 0 {
+			fmt.Println("你需要至少押注一元。")
+			continue
+		}
+		if x > money {
+			fmt.Printf("你只有 %d 元，请重新输入。\n", money)
+			continue
+		}
+		if err == nil {
+			break
+		}
+	}
+	chk := GetRand(100) + 1
+	fmt.Println("你骰出了点数：", chk)
+	if chk > 50 {
+		fmt.Println("【庄家】：小子，运气不错啊，拿好你的钱。")
+		money += x
+		winMoney += x
+		fmt.Println("你获得了", x, "元。")
+	} else {
+		fmt.Println("【庄家】：我这里可没有后悔药卖，好好开你的餐厅吧……")
+		money -= x
+		lostMoney += x
+		fmt.Println("你失去了", x, "元。")
+	}
+}
+
 func Morning() {
 	fmt.Printf("%s经营的第 %d 天，%s\n", restaurant, day, hitokoto[GetRand(len(hitokoto))])
 	fmt.Println(hintMorning)
@@ -61,6 +93,8 @@ func Morning() {
 		fmt.Println("你花了一上午进行大扫除，现在厨房的每个角落都一尘不染！")
 	} else if op == 3 {
 		MyKitchen.Upgrade()
+	} else if op == 4 {
+		smallGame()
 	} else {
 		zeroCnt++
 	}
@@ -69,6 +103,14 @@ func Morning() {
 
 func Noon() {
 	fmt.Println(hintNoon)
+	dayIncome = 0
+	if zeroCnt > 0 && zeroCnt%5 == 0 {
+		fmt.Println("不知为何，你觉得今天头脑清醒，手脚灵活，干起活来更有效率了……")
+		g := NewGuest()
+		g.ShowUp()
+		MyKitchen.Cook(g)
+		goStep()
+	}
 	for i := 0; i < MyKitchen.level; i++ {
 		g := NewGuest()
 		g.ShowUp()
@@ -90,10 +132,12 @@ func Evening() bool {
 		}
 	}
 	if op == 1 {
-		MyStore.Check()
+		MyMarket.Welcome()
 	} else if op == 2 {
-		fmt.Printf("你的小金库里还剩下 %d 元。\n", money)
+		MyStore.Check()
 	} else if op == 3 {
+		fmt.Printf("你的小金库里还剩下 %d 元。\n", money)
+	} else if op == 4 {
 		fmt.Println("你想了想，觉得开餐厅这件事还是不太适合自己……")
 		fmt.Println("于是你决定在今天结束时将", restaurant, "转让给其他人。")
 		goStep()
@@ -146,7 +190,7 @@ func Init() {
 		for id, v := range foods {
 			tmp := stuff{
 				name:    v,
-				endtime: 7,
+				endtime: 10,
 				number:  2,
 			}
 			if id <= 2 {
@@ -174,13 +218,13 @@ func Init() {
 func BreakJudge() bool {
 	if money < 0 {
 		fmt.Println("很遗憾！", restaurant, "最终因资金链断裂破产了……游戏结束。")
-		return false
+		return true
 	}
 	if day > 999 {
 		fmt.Println("三年之期已到，游戏自动结束，感谢支持！")
-		return false
+		return true
 	}
-	return true
+	return false
 }
 
 func CheckAchieve() {
@@ -199,7 +243,7 @@ func CheckAchieve() {
 
 func Summary() {
 	fmt.Println(gap1)
-	fmt.Printf("下面是游戏总结：\n%s最终赚了 %d 元。\n", restaurant, money)
+	fmt.Printf("下面是游戏总结：\n%s经营了 %d 天，最终赚了 %d 元。\n", restaurant, day, money)
 	fmt.Println("这是你获得的成就：")
 	for _, v := range achievementList {
 		if v.fg == true {

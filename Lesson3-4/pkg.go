@@ -18,6 +18,10 @@ var (
 	badCnt     int
 	payNumber  int
 	zeroCnt    int
+	discount   int
+	dayIncome  int
+	winMoney   int
+	lostMoney  int
 )
 
 type Guest struct {
@@ -196,16 +200,16 @@ func (s *storehouse) Clear() {
 func (s *storehouse) Check() {
 	l1, l2, l3 := len(s.taste), len(s.sauce), len(s.dish)
 	fmt.Println(gap1)
-	fmt.Printf("仓库里共有%d件存货。 \n", l1+l2+l3)
-	fmt.Printf("配菜共有%d件：\n", l1)
+	fmt.Printf("仓库里共有 %d 件存货。 \n", l1+l2+l3)
+	fmt.Printf("配菜共有 %d 件：\n", l1)
 	for _, t := range s.taste {
 		t.Check()
 	}
-	fmt.Printf("酱料共有%d件：\n", l2)
+	fmt.Printf("酱料共有 %d 件：\n", l2)
 	for _, t := range s.sauce {
 		t.Check()
 	}
-	fmt.Printf("主食共有%d件：\n", l3)
+	fmt.Printf("主食共有 %d 件：\n", l3)
 	for _, d := range s.dish {
 		d.Check()
 	}
@@ -223,6 +227,7 @@ func (m market) Welcome() {
 		fmt.Printf("%d.新鲜的 %s，价格为 %d\n", id+1, foods[id], price[id])
 	}
 	var op, val, cnt int
+	fg := false
 	for {
 		_, err := fmt.Scanln(&op)
 		if err == nil {
@@ -237,34 +242,36 @@ func (m market) Welcome() {
 	fmt.Printf("【前台】：好的，%s，您需要多少份？\n", foods[op])
 	for {
 		_, err := fmt.Scanln(&cnt)
+		if cnt < 0 {
+			continue
+		}
 		if err == nil {
 			break
 		}
 	}
-	if cnt < 0 {
-		panic("expect a positive integer")
-	}
 	val = price[op] * cnt
 	if money < val {
+		fg = true
 		goto end
 	}
+start:
 	switch op {
 	case 0, 1, 2:
 		MyStore.Add('t', stuff{
 			name:    foods[op],
-			endtime: day + 7,
+			endtime: day + 10,
 			number:  cnt,
 		})
 	case 3, 4, 5:
 		MyStore.Add('s', stuff{
 			name:    foods[op],
-			endtime: day + 7,
+			endtime: day + 10,
 			number:  cnt,
 		})
 	case 6, 7, 8:
 		MyStore.Add('d', stuff{
 			name:    foods[op],
-			endtime: day + 7,
+			endtime: day + 10,
 			number:  cnt,
 		})
 	}
@@ -273,14 +280,21 @@ end:
 		m.gala = GetRand(15) + day
 	}
 	if m.gala == day {
+		val = val * 7 / 10
+		if fg == true && money >= val {
+			fg = false
+			goto start
+		}
 		fmt.Println("【前台】：恭喜您，本商店今日大促销，全场七折！")
-		val = val * 10 / 7
+		if fg == false {
+			discount++
+		}
 		m.gala = GetRand(15) + day + 1
 	} else {
 		fmt.Printf("【前台】：对了，顺带一提，本商店将在第 %d 日进行大促销，千万不要错过哦！\n", m.gala)
 	}
-	if val == 0 || val > money {
-		if val > money {
+	if val == 0 || fg == true {
+		if fg == true {
 			fmt.Println("【你】（小声）：预算好像不够啊……")
 		}
 		fmt.Println("你什么也没买，两手空空地离开了商店。")

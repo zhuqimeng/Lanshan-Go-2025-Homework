@@ -84,17 +84,27 @@ var achievementList = []Achievement{
 			}
 			return false
 		},
-		describe: "【倾家荡产】：你花光了所有积蓄。",
+		describe: "【中道崩殂】：你花光了所有积蓄。",
 	},
 	{
 		fg: false,
 		check: func() bool {
-			if money > 300 {
+			if money >= 300 {
 				return true
 			}
 			return false
 		},
 		describe: "【小有所获】：第一次存款达到 300 元。",
+	},
+	{
+		fg: false,
+		check: func() bool {
+			if dayIncome >= 100 {
+				return true
+			}
+			return false
+		},
+		describe: "【日进斗金】：单日收入达到 100 元。",
 	},
 	{
 		fg: false,
@@ -139,11 +149,71 @@ var achievementList = []Achievement{
 	{
 		fg: false,
 		check: func() bool {
-			if zeroCnt > 10 {
+			if discount > 0 {
 				return true
 			}
 			return false
 		},
-		describe: "【养生流派】：进行十次休息。",
+		describe: "【捡个便宜】：在商店促销时购买一次食材。",
+	},
+	{
+		fg: false,
+		check: func() bool {
+			if zeroCnt > 0 {
+				return true
+			}
+			return false
+		},
+		describe: "【小憩一下】：进行一次休息。",
+	},
+	{
+		fg: false,
+		check: func() bool {
+			if zeroCnt >= 5 {
+				return true
+			}
+			return false
+		},
+		describe: "【精力充沛】：累计进行五次休息。",
+	},
+	{
+		fg: false,
+		check: func() bool {
+			if zeroCnt >= 10 {
+				return true
+			}
+			return false
+		},
+		describe: "【养生流派】：累计进行十次休息。",
+	},
+	{
+		fg: false,
+		check: func() bool {
+			if MyKitchen.level > 1 {
+				return true
+			}
+			return false
+		},
+		describe: "【节节高升】：对厨房进行一次升级。",
+	},
+	{
+		fg: false,
+		check: func() bool {
+			if winMoney >= 100 {
+				return true
+			}
+			return false
+		},
+		describe: "【幸运骰子】：通过扔骰子累计赚取 100 元。",
+	},
+	{
+		fg: false,
+		check: func() bool {
+			if lostMoney >= 100 {
+				return true
+			}
+			return false
+		},
+		describe: "【血本无归】：因为扔骰子累计失去 100 元。",
 	},
 }
