@@ -52,6 +52,10 @@ func GetChoice() string {
 }
 
 func smallGame() {
+	if money == 0 {
+		fmt.Println("你现在没有钱进行押注。")
+		return
+	}
 	fmt.Println("【庄家】：输入你要押注的钱，然后投掷骰子……有一半的概率获得双倍，一半的概率失去所有。")
 	var x int
 	for {
@@ -138,6 +142,34 @@ func Noon() {
 	goStep()
 }
 
+func Afternoon() {
+	fmt.Println(hintAfternoon)
+	var op int
+Loop:
+	for {
+		_, err := fmt.Scanln(&op)
+		if err == nil {
+			break
+		}
+		fmt.Println("请再次输入。")
+	}
+	if op == 1 {
+		MyStore.Freezing()
+	} else if op == 2 {
+		earn := zeroCnt*7 + GetRand(20) + 1
+		money += earn
+		maxEarn = max(earn, maxEarn)
+		zeroCnt = 0
+		fmt.Println("恭喜！你通过兼职一下午换取了", earn, "元。")
+	} else if op == 0 {
+		zeroCnt++
+	} else {
+		fmt.Println("请再次输入。")
+		goto Loop
+	}
+	goStep()
+}
+
 func Evening() bool {
 	fmt.Println(hintEvening)
 	MyStore.Clear()
@@ -173,6 +205,7 @@ Loop:
 
 func goStep() {
 	fmt.Println("请按回车键继续...")
+	fmt.Println()
 	reader := bufio.NewReader(os.Stdin)
 	_, err := reader.ReadString('\n')
 	if err != nil {
@@ -206,7 +239,7 @@ Loop:
 	}
 	switch mode {
 	case 1:
-		money = 100
+		money = 150
 		MyKitchen = kitchen{
 			level: 1,
 			tidy:  100,
@@ -241,6 +274,7 @@ Loop:
 	}
 	fmt.Println("你获得了启动资金", money, "元。")
 	fmt.Println("那么，游戏开始……")
+	fmt.Println("通关条件：经营餐馆一百天或者存款达到一万元。")
 }
 
 func BreakJudge() bool {
@@ -248,14 +282,24 @@ func BreakJudge() bool {
 		fmt.Println("很遗憾！", restaurant, "最终因资金链断裂破产了……游戏结束。")
 		return true
 	}
-	if day > 999 {
-		fmt.Println("三年之期已到，游戏自动结束，感谢支持！")
+	if okFlag == false && (day >= 100 || money >= 10000) {
+		fmt.Println("恭喜！你通关了游戏。感谢支持。")
+		fmt.Println("是否继续游戏？(y/n)")
+		op := GetChoice()
+		fmt.Println()
+		if op == "y" {
+			okFlag = true
+			return false
+		}
 		return true
 	}
 	return false
 }
 
 func CheckAchieve() {
+	if MyMarket.gala == day {
+		MyMarket.gala = GetRand(15) + day + 1
+	}
 	for id, v := range achievementList {
 		if v.fg == false && v.check() {
 			fmt.Println("你解锁了成就，", v.describe)

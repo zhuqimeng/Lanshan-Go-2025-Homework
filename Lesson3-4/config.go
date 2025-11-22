@@ -127,6 +127,69 @@ var guestList = []Guest{
 		pay:   29,
 		sex:   0,
 	},
+	{
+		name:  "亚里士多德",
+		hello: "我们日复一日做的事情，决定了我们是怎样的人。",
+		taste: "牛肉",
+		sauce: "无",
+		dish:  "米饭",
+		pay:   23,
+		sex:   1,
+	},
+	{
+		name:  "亚里士多德",
+		hello: "幸福是把灵魂安放在最适当的位置。",
+		taste: "无",
+		sauce: "辣椒酱",
+		dish:  "米饭",
+		pay:   23,
+		sex:   1,
+	},
+	{
+		name:  "御坂美琴",
+		hello: "别对自己说谎。",
+		taste: "蔬菜",
+		sauce: "辣椒酱",
+		dish:  "烤鱼",
+		pay:   45,
+		sex:   0,
+	},
+	{
+		name:  "神龙",
+		hello: "遇到我是一种幸运。",
+		taste: "牛肉",
+		sauce: "沙拉酱",
+		dish:  "烤鱼",
+		pay:   77,
+		sex:   -1,
+	},
+	{
+		name:  "薇尔莉特",
+		hello: "花无凋零之时，爱无传达之期，爱亘古不变，紫罗兰永世长存。",
+		taste: "无",
+		sauce: "沙拉酱",
+		dish:  "米饭",
+		pay:   19,
+		sex:   0,
+	},
+	{
+		name:  "薇尔莉特",
+		hello: "我想，我们正是在伤害与被伤害的循环往复中，渐渐变得温柔起来的。",
+		taste: "无",
+		sauce: "沙拉酱",
+		dish:  "面条",
+		pay:   18,
+		sex:   0,
+	},
+	{
+		name:  "薇尔莉特",
+		hello: "语言的含义有两层，说出口的并不是全部。",
+		taste: "水果",
+		sauce: "无",
+		dish:  "烤鱼",
+		pay:   21,
+		sex:   0,
+	},
 }
 
 var achievementList = []Achievement{
@@ -143,22 +206,32 @@ var achievementList = []Achievement{
 	{
 		fg: false,
 		check: func() bool {
-			if money >= 300 {
+			if money >= 500 {
 				return true
 			}
 			return false
 		},
-		describe: "【小有所获】：第一次存款达到 300 元。",
+		describe: "【小有所获】：第一次存款达到 500 元。",
 	},
 	{
 		fg: false,
 		check: func() bool {
-			if money >= 666 {
+			if money >= 1000 {
 				return true
 			}
 			return false
 		},
-		describe: "【经济头脑】：第一次存款达到 666 元。",
+		describe: "【经济头脑】：第一次存款达到 1000 元。",
+	},
+	{
+		fg: false,
+		check: func() bool {
+			if money >= 10000 {
+				return true
+			}
+			return false
+		},
+		describe: "【经济自由】：最终存款达到 10000 元。",
 	},
 	{
 		fg: false,
@@ -168,7 +241,7 @@ var achievementList = []Achievement{
 			}
 			return false
 		},
-		describe: "【日进斗金】：单日收入达到 100 元。",
+		describe: "【日进斗金】：餐厅单日收入达到 100 元。",
 	},
 	{
 		fg: false,
@@ -183,12 +256,32 @@ var achievementList = []Achievement{
 	{
 		fg: false,
 		check: func() bool {
+			if serveCnt >= 10 {
+				return true
+			}
+			return false
+		},
+		describe: "【优质服务】：累计为顾客提供十次菜品。",
+	},
+	{
+		fg: false,
+		check: func() bool {
 			if refuseCnt > 0 {
 				return true
 			}
 			return false
 		},
 		describe: "【学会拒绝】：第一次拒绝为顾客上菜。",
+	},
+	{
+		fg: false,
+		check: func() bool {
+			if refuseCnt >= 10 {
+				return true
+			}
+			return false
+		},
+		describe: "【霸道老板】：累计十次拒绝为顾客提供菜品。",
 	},
 	{
 		fg: false,
@@ -209,6 +302,16 @@ var achievementList = []Achievement{
 			return false
 		},
 		describe: "【及时补充】：第一次去商店补充食材。",
+	},
+	{
+		fg: false,
+		check: func() bool {
+			if payNumber >= 100 {
+				return true
+			}
+			return false
+		},
+		describe: "【资金循环】：累计在商店消费 100 元。",
 	},
 	{
 		fg: false,
@@ -258,7 +361,17 @@ var achievementList = []Achievement{
 			}
 			return false
 		},
-		describe: "【节节高升】：对厨房进行一次升级。",
+		describe: "【休整一番】：对厨房进行一次升级。",
+	},
+	{
+		fg: false,
+		check: func() bool {
+			if MyKitchen.level > 3 {
+				return true
+			}
+			return false
+		},
+		describe: "【节节高升】：对厨房进行三次升级。",
 	},
 	{
 		fg: false,
@@ -296,5 +409,55 @@ var achievementList = []Achievement{
 			return allPut
 		},
 		describe: "【倾家荡产】：因为扔骰子而输掉了所有存款。",
+	},
+	{
+		fg: false,
+		check: func() bool {
+			if maxEarn >= 100 {
+				return true
+			}
+			return false
+		},
+		describe: "【兼职高手】：单日兼职赚取超过 100 元。",
+	},
+	{
+		fg: false,
+		check: func() bool {
+			if day >= 10 {
+				return true
+			}
+			return false
+		},
+		describe: "【初出茅庐】：经营餐厅超过 10 天。",
+	},
+	{
+		fg: false,
+		check: func() bool {
+			if day >= 30 {
+				return true
+			}
+			return false
+		},
+		describe: "【渐入佳境】：经营餐厅超过 30 天。",
+	},
+	{
+		fg: false,
+		check: func() bool {
+			if day >= 70 {
+				return true
+			}
+			return false
+		},
+		describe: "【持之以恒】：经营餐厅超过 70 天。",
+	},
+	{
+		fg: false,
+		check: func() bool {
+			if day >= 100 {
+				return true
+			}
+			return false
+		},
+		describe: "【商业巨亨】：经营餐厅超过 100 天。",
 	},
 }

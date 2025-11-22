@@ -24,6 +24,8 @@ var (
 	lostMoney  int
 	maxStake   int
 	allPut     bool
+	maxEarn    int
+	okFlag     bool
 )
 
 type Guest struct {
@@ -96,8 +98,9 @@ func (k kitchen) Cook(g Guest) {
 	if g.taste != "无" {
 		for i, v := range MyStore.taste {
 			if v.name == g.taste && v.number > 0 {
-				id1 = i
-				break
+				if id1 == -1 || MyStore.taste[id1].endtime > v.endtime {
+					id1 = i
+				}
 			}
 		}
 		if id1 == -1 {
@@ -108,8 +111,9 @@ func (k kitchen) Cook(g Guest) {
 	if g.sauce != "无" {
 		for i, v := range MyStore.sauce {
 			if v.name == g.sauce && v.number > 0 {
-				id2 = i
-				break
+				if id2 == -1 || MyStore.sauce[id2].endtime > v.endtime {
+					id2 = i
+				}
 			}
 		}
 		if id2 == -1 {
@@ -120,8 +124,9 @@ func (k kitchen) Cook(g Guest) {
 	if g.dish != "无" {
 		for i, v := range MyStore.dish {
 			if v.name == g.dish && v.number > 0 {
-				id3 = i
-				break
+				if id3 == -1 || MyStore.dish[id3].endtime > v.endtime {
+					id3 = i
+				}
 			}
 		}
 		if id3 == -1 {
@@ -179,6 +184,7 @@ type Storehouse interface {
 	Add(byte, stuff)
 	Clear()
 	Check()
+	Freezing()
 }
 
 func (s *storehouse) Add(ch byte, one stuff) {
@@ -218,6 +224,46 @@ func (s *storehouse) Check() {
 	fmt.Println(gap2)
 }
 
+func (s *storehouse) Freezing() {
+	number := len(s.taste) + len(s.sauce) + len(s.dish)
+	if money < number {
+		fmt.Println("你没有足够的钱进行冷藏。")
+		return
+	}
+	fmt.Println("你的仓库里现在有", number, "件存货，因此，每多冷藏一天需要消耗电费", number, "元。")
+	fmt.Println("请输入你希望冷藏的天数：")
+	var x, val int
+Loop:
+	for {
+		_, err := fmt.Scanln(&x)
+		if x <= 0 {
+			fmt.Println("请输入正数。")
+			continue
+		}
+		if err == nil {
+			break
+		}
+	}
+	val = x * number
+	fmt.Println("这需要花费", val, "元。")
+	if val > money {
+		fmt.Println("但你只有", money, "元。")
+		fmt.Println("冷藏失败……请重新输入。")
+		goto Loop
+	}
+	for id := range s.taste {
+		s.taste[id].endtime += x
+	}
+	for id := range s.sauce {
+		s.sauce[id].endtime += x
+	}
+	for id := range s.dish {
+		s.dish[id].endtime += x
+	}
+	money -= val
+	fmt.Println("冷藏成功！你的存货现在可以保存更长时间了。")
+}
+
 type market struct {
 	gala int
 }
@@ -247,6 +293,7 @@ Loop:
 	for {
 		_, err := fmt.Scanln(&cnt)
 		if cnt < 0 {
+			fmt.Println("请输入正数。")
 			continue
 		}
 		if err == nil {
@@ -281,9 +328,6 @@ start:
 		})
 	}
 end:
-	if m.gala < day {
-		m.gala = GetRand(15) + day
-	}
 	if m.gala == day {
 		val = val * 7 / 10
 		if fg == true && money >= val {
@@ -294,7 +338,6 @@ end:
 		if fg == false {
 			discount++
 		}
-		m.gala = GetRand(15) + day + 1
 	} else {
 		fmt.Printf("【前台】：对了，顺带一提，本商店将在第 %d 日进行大促销，千万不要错过哦！\n", m.gala)
 	}
