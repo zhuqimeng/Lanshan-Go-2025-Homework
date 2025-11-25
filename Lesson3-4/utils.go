@@ -275,11 +275,12 @@ Loop:
 	fmt.Println("你获得了启动资金", money, "元。")
 	fmt.Println("那么，游戏开始……")
 	fmt.Println("通关条件：经营餐馆一百天或者存款达到一万元。")
+	goStep()
 }
 
 func BreakJudge() bool {
 	if money < 0 {
-		fmt.Println("很遗憾！", restaurant, "最终因资金链断裂破产了……游戏结束。")
+		fmt.Printf("\033[1;31;40m%s %s %s\033[0m\n", "很遗憾！", restaurant, "最终因资金链断裂破产了……游戏结束。")
 		return true
 	}
 	if okFlag == false && (day >= 100 || money >= 10000) {
@@ -304,6 +305,8 @@ func CheckAchieve() {
 		if v.fg == false && v.check() {
 			fmt.Println("你解锁了成就，", v.describe)
 			achievementList[id].fg = true
+			money += v.bonus
+			fmt.Println("(奖励", v.bonus, "元。)")
 		}
 	}
 	var lose int

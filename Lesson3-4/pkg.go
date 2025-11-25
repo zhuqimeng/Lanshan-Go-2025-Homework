@@ -149,7 +149,7 @@ func (k kitchen) Cook(g Guest) {
 		serveCnt++
 		chk := GetRand(100)
 		if chk > MyKitchen.tidy {
-			fmt.Println("由于厨房糟糕的卫生，顾客拒绝为你的菜品付款。（是时候打扫一下厨房了！）")
+			fmt.Printf("\033[1;31;40m%s\033[0m\n", "由于厨房糟糕的卫生，顾客拒绝为你的菜品付款。（是时候打扫一下厨房了！）")
 			badCnt++
 		} else {
 			money += g.pay
@@ -356,5 +356,6 @@ end:
 type Achievement struct {
 	fg       bool
 	check    func() bool
+	bonus    int
 	describe string
 }

@@ -196,11 +196,12 @@ var achievementList = []Achievement{
 	{
 		fg: false,
 		check: func() bool {
-			if money < 0 {
+			if money <= 0 {
 				return true
 			}
 			return false
 		},
+		bonus:    6,
 		describe: "【中道崩殂】：你花光了所有积蓄。",
 	},
 	{
@@ -211,6 +212,7 @@ var achievementList = []Achievement{
 			}
 			return false
 		},
+		bonus:    50,
 		describe: "【小有所获】：第一次存款达到 500 元。",
 	},
 	{
@@ -221,6 +223,7 @@ var achievementList = []Achievement{
 			}
 			return false
 		},
+		bonus:    100,
 		describe: "【经济头脑】：第一次存款达到 1000 元。",
 	},
 	{
@@ -231,7 +234,8 @@ var achievementList = []Achievement{
 			}
 			return false
 		},
-		describe: "【经济自由】：最终存款达到 10000 元。",
+		bonus:    666,
+		describe: "【财务自由】：最终存款达到 10000 元。",
 	},
 	{
 		fg: false,
@@ -241,6 +245,7 @@ var achievementList = []Achievement{
 			}
 			return false
 		},
+		bonus:    15,
 		describe: "【日进斗金】：餐厅单日收入达到 100 元。",
 	},
 	{
@@ -251,6 +256,7 @@ var achievementList = []Achievement{
 			}
 			return false
 		},
+		bonus:    10,
 		describe: "【第一桶金】：第一次为顾客提供菜品。",
 	},
 	{
@@ -261,6 +267,7 @@ var achievementList = []Achievement{
 			}
 			return false
 		},
+		bonus:    30,
 		describe: "【优质服务】：累计为顾客提供十次菜品。",
 	},
 	{
@@ -271,6 +278,7 @@ var achievementList = []Achievement{
 			}
 			return false
 		},
+		bonus:    10,
 		describe: "【学会拒绝】：第一次拒绝为顾客上菜。",
 	},
 	{
@@ -281,6 +289,7 @@ var achievementList = []Achievement{
 			}
 			return false
 		},
+		bonus:    30,
 		describe: "【霸道老板】：累计十次拒绝为顾客提供菜品。",
 	},
 	{
@@ -291,6 +300,7 @@ var achievementList = []Achievement{
 			}
 			return false
 		},
+		bonus:    15,
 		describe: "【邋里邋遢】：第一次因为厨房太脏而被吃霸王餐。",
 	},
 	{
@@ -301,6 +311,7 @@ var achievementList = []Achievement{
 			}
 			return false
 		},
+		bonus:    10,
 		describe: "【及时补充】：第一次去商店补充食材。",
 	},
 	{
@@ -311,6 +322,7 @@ var achievementList = []Achievement{
 			}
 			return false
 		},
+		bonus:    30,
 		describe: "【资金循环】：累计在商店消费 100 元。",
 	},
 	{
@@ -321,6 +333,7 @@ var achievementList = []Achievement{
 			}
 			return false
 		},
+		bonus:    10,
 		describe: "【捡个便宜】：在商店促销时购买一次食材。",
 	},
 	{
@@ -331,6 +344,7 @@ var achievementList = []Achievement{
 			}
 			return false
 		},
+		bonus:    10,
 		describe: "【小憩一下】：进行一次休息。",
 	},
 	{
@@ -341,6 +355,7 @@ var achievementList = []Achievement{
 			}
 			return false
 		},
+		bonus:    20,
 		describe: "【精力充沛】：累计进行五次休息。",
 	},
 	{
@@ -351,6 +366,7 @@ var achievementList = []Achievement{
 			}
 			return false
 		},
+		bonus:    30,
 		describe: "【养生流派】：累计进行十次休息。",
 	},
 	{
@@ -361,6 +377,7 @@ var achievementList = []Achievement{
 			}
 			return false
 		},
+		bonus:    20,
 		describe: "【休整一番】：对厨房进行一次升级。",
 	},
 	{
@@ -371,6 +388,7 @@ var achievementList = []Achievement{
 			}
 			return false
 		},
+		bonus:    50,
 		describe: "【节节高升】：对厨房进行三次升级。",
 	},
 	{
@@ -381,6 +399,7 @@ var achievementList = []Achievement{
 			}
 			return false
 		},
+		bonus:    20,
 		describe: "【幸运骰子】：通过扔骰子累计赚取 300 元。",
 	},
 	{
@@ -391,6 +410,7 @@ var achievementList = []Achievement{
 			}
 			return false
 		},
+		bonus:    20,
 		describe: "【血本无归】：因为扔骰子累计失去 300 元。",
 	},
 	{
@@ -401,6 +421,7 @@ var achievementList = []Achievement{
 			}
 			return false
 		},
+		bonus:    40,
 		describe: "【一掷千金】：扔骰子单次押注金额超过 1000 元。",
 	},
 	{
@@ -408,17 +429,19 @@ var achievementList = []Achievement{
 		check: func() bool {
 			return allPut
 		},
+		bonus:    15,
 		describe: "【倾家荡产】：因为扔骰子而输掉了所有存款。",
 	},
 	{
 		fg: false,
 		check: func() bool {
-			if maxEarn >= 100 {
+			if maxEarn >= 50 {
 				return true
 			}
 			return false
 		},
-		describe: "【兼职高手】：单日兼职赚取超过 100 元。",
+		bonus:    30,
+		describe: "【兼职高手】：单日兼职赚取超过 50 元。",
 	},
 	{
 		fg: false,
@@ -428,6 +451,7 @@ var achievementList = []Achievement{
 			}
 			return false
 		},
+		bonus:    10,
 		describe: "【初出茅庐】：经营餐厅超过 10 天。",
 	},
 	{
@@ -438,6 +462,7 @@ var achievementList = []Achievement{
 			}
 			return false
 		},
+		bonus:    30,
 		describe: "【渐入佳境】：经营餐厅超过 30 天。",
 	},
 	{
@@ -448,6 +473,7 @@ var achievementList = []Achievement{
 			}
 			return false
 		},
+		bonus:    70,
 		describe: "【持之以恒】：经营餐厅超过 70 天。",
 	},
 	{
@@ -458,6 +484,7 @@ var achievementList = []Achievement{
 			}
 			return false
 		},
+		bonus:    666,
 		describe: "【商业巨亨】：经营餐厅超过 100 天。",
 	},
 }
