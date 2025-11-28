@@ -247,7 +247,7 @@ Loop:
 		for id, v := range foods {
 			tmp := stuff{
 				name:    v,
-				endtime: 10,
+				endtime: 7,
 				number:  2,
 			}
 			if id <= 2 {
@@ -309,8 +309,7 @@ func CheckAchieve() {
 			fmt.Println("(奖励", v.bonus, "元。)")
 		}
 	}
-	var lose int
-	lose = min(10+(day/10), 30)
+	lose := 10 + (day / 5)
 	money -= lose
 	fmt.Printf("凌晨 00：00，自动支付了餐厅门面租金 %d 元。\n", lose)
 	goStep()
@@ -327,4 +326,6 @@ func Summary() {
 	}
 	fmt.Println(gap2)
 	goStep()
+	fmt.Println("游戏将在 5 秒后自动关闭。")
+	time.Sleep(5 * time.Second)
 }

@@ -284,9 +284,14 @@ Loop:
 		}
 		fmt.Println("请再次输入。")
 	}
-	if op < 1 || op > 9 {
+	if op < 0 || op > 9 {
 		fmt.Println("请再次输入。")
 		goto Loop
+	}
+	if op == 0 {
+		fmt.Println("你摇摇头，满脸不屑地离开了商店。")
+		fmt.Println("【前台】：…………")
+		return
 	}
 	op--
 	fmt.Printf("【前台】：好的，%s，您需要多少份？\n", foods[op])
@@ -311,19 +316,19 @@ start:
 	case 0, 1, 2:
 		MyStore.Add('t', stuff{
 			name:    foods[op],
-			endtime: day + 10,
+			endtime: day + 7,
 			number:  cnt,
 		})
 	case 3, 4, 5:
 		MyStore.Add('s', stuff{
 			name:    foods[op],
-			endtime: day + 10,
+			endtime: day + 7,
 			number:  cnt,
 		})
 	case 6, 7, 8:
 		MyStore.Add('d', stuff{
 			name:    foods[op],
-			endtime: day + 10,
+			endtime: day + 7,
 			number:  cnt,
 		})
 	}
@@ -341,10 +346,8 @@ end:
 	} else {
 		fmt.Printf("【前台】：对了，顺带一提，本商店将在第 %d 日进行大促销，千万不要错过哦！\n", m.gala)
 	}
-	if val == 0 || fg == true {
-		if fg == true {
-			fmt.Println("【你】（小声）：预算好像不够啊……")
-		}
+	if fg == true {
+		fmt.Println("【你】（小声）：预算好像不够啊……")
 		fmt.Println("你什么也没买，两手空空地离开了商店。")
 		return
 	}

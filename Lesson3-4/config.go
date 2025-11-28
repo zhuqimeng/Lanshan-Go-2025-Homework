@@ -356,7 +356,7 @@ var achievementList = []Achievement{
 			return false
 		},
 		bonus:    20,
-		describe: "【精力充沛】：累计进行五次休息。",
+		describe: "【精力充沛】：连续进行五次休息。",
 	},
 	{
 		fg: false,
@@ -367,7 +367,7 @@ var achievementList = []Achievement{
 			return false
 		},
 		bonus:    30,
-		describe: "【养生流派】：累计进行十次休息。",
+		describe: "【养生流派】：连续进行十次休息。",
 	},
 	{
 		fg: false,
