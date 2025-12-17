@@ -11,13 +11,13 @@ type QueryRequest struct {
 	Status   string `json:"status"`
 	Priority string `json:"priority"`
 	Token    string `json:"token"`
+	Version  string `json:"version"`
 }
 
 type User struct {
 	gorm.Model
 	Username string `json:"username" gorm:"size:64;unique;not null;comment:用户名"`
 	Password string `json:"password" gorm:"size:128;not null;comment:密码哈希"` // 不返回密码
-	Token    string `json:"token" gorm:"size:512;default:null;comment:认证令牌"`
 }
 
 type CreateUserRequest struct {

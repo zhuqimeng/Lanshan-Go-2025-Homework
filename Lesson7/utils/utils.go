@@ -2,8 +2,10 @@ package utils
 
 import (
 	"Lesson07/model"
+	"crypto/rand"
 	"fmt"
 	"log"
+	"math/big"
 	"time"
 
 	"github.com/bwmarrin/snowflake"
@@ -68,4 +70,9 @@ func CheckToken(tokenString string) (bool, error) {
 		return true, nil
 	}
 	return false, nil
+}
+
+func GetRand(l, r int64) int64 {
+	num, _ := rand.Int(rand.Reader, big.NewInt(r-l+1))
+	return num.Int64() + l
 }

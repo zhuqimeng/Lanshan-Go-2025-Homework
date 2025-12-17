@@ -5,16 +5,20 @@ import (
 	"Lesson07/dao"
 	"log"
 
+	"github.com/redis/go-redis/v9"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 )
 
 func main() {
-	dsn := "root:your_sql_password@tcp(127.0.0.1:3306)/testbase?charset=utf8mb4&parseTime=True&loc=Local"
+	dsn := "root:your_mysql_password@tcp(127.0.0.1:3306)/testbase?charset=utf8mb4&parseTime=True&loc=Local"
 	myDb, err := gorm.Open(mysql.Open(dsn), &gorm.Config{})
 	if err != nil {
 		log.Fatal("连接数据库失败: ", err)
 	}
-	dao.InitDB(myDb)
+	cli := redis.NewClient(&redis.Options{
+		Addr: "localhost:6379",
+	})
+	dao.InitDB(myDb, cli)
 	api.InitRouterGin()
 }

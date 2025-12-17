@@ -15,21 +15,16 @@ func Show(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
-
 	if fg, err := utils.CheckToken(req.Token); err != nil || fg == false {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "invalid token"})
 		return
 	}
-
-	query := dao.GetToDos(&req)
-
-	var results []dao.ToDo
-	if err := query.Find(&results).Error; err != nil {
+	result, err := dao.GetToDos(&req)
+	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
-
-	c.JSON(http.StatusOK, results)
+	c.JSON(http.StatusOK, *result)
 }
 
 func Create(c *gin.Context) {
